@@ -3,6 +3,7 @@ document.getElementById('taskInputForm').addEventListener('submit', SaveTask);
 function SaveTask(e) {
 
     var taskId = chance.guid();
+    var taskTitle = document.getElementById('taskTitleInput').value;
     var taskDesc = document.getElementById('taskDescInput').value;
     var taskImportance = document.getElementById('taskImportanceInput').value;
     var taskStatus = document.getElementById('taskStatusInput').value;
@@ -11,6 +12,7 @@ function SaveTask(e) {
 
   var task = {
     id: taskId,
+    title: taskTitle,
     description: taskDesc,
     Importance: taskImportance,
     assignedTo: taskAssignedTo,
@@ -38,12 +40,13 @@ function SaveTask(e) {
 
 function loadTasks() {
   var tasks = JSON.parse(localStorage.getItem('tasks'));
-  var tasksListe = document.getElementById('tasksList');
+  var tasksList = document.getElementById('tasksList');
 
   tasksList.innerHTML = '';
 
   for (var i = 0; i < tasks.length; i++) {
     var id = tasks[i].id;
+    var title = tasks[i].title;
     var desc = tasks[i].description;
     var Importance = tasks[i].Importance;
     var assignedTo = tasks[i].assignedTo;
@@ -52,17 +55,18 @@ function loadTasks() {
     tasksList.innerHTML +=   '<div class="task jumbotron" style="background-color: #b3ffff; padding:20px;">'+
                               '<h6>Task ID: ' + id + '</h6>'+
                               '<p>Status: <span class="badge badge-info">' + status + '</span></p>'+
-                              '<h3>' + desc + '</h3>'+
+                              '<h3>' + title + '</h3>' +
+                              '<p>' + desc + '</p>'+
                               '<p><i class="fas fa-exclamation"></i> ' + Importance + '</p>'+
                               '<p><i class="fas fa-user"></i> ' + assignedTo + '</p>'+
-                              '<a href="#" onclick="deleteTask(\''+id+'\')" class="btn btn-danger">Delete</a>'+
+                              '<a href="#" onclick="deleteTask(\''+id+'\')" class="btn btn-danger pull-right">Delete</a>'+
                               '<div class="btn-group" style="margin:10px;">' +
                               '<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' + 'Set Status' +
                               '</button>' +
                               '<div class="dropdown-menu">' +
-                              '  <a class="dropdown-item" onclick="setStatusAvailable(\''+id+'\')" href="#">Available</a>' +
-                              '  <a class="dropdown-item" onclick="setStatusInProgress(\''+id+'\')" href="#">In Progress</a>' + 
-                              '  <a class="dropdown-item" onclick="setStatusDone(\''+id+'\')" href="#">Done</a>' +
+                              '  <button class="dropdown-item" onclick="setStatus(\''+id+'\', \'' + 'Available' +'\')" href="#">Available</button>' +
+                              '  <a class="dropdown-item" onclick="setStatus(\''+id+'\', \'' + 'In Progress' +'\')" href="#">In Progress</a>' + 
+                              '  <a class="dropdown-item" onclick="setStatus(\''+id+'\', \'' + 'Done' +'\')" href="#">Done</a>' +
                               '</div>' +
                               '</div>' +
 
@@ -86,40 +90,21 @@ function deleteTask(id) {
     loadTasks();
   }
 
+//zmiana statusu
 
-function setStatusAvailable(id) {
+function setStatus(id, status) {
+
     var tasks = JSON.parse(localStorage.getItem('tasks'));
     for (var i = 0; i < tasks.length; i++) {
         if (tasks[i].id == id) {
-            tasks[i].status = 'Available';
+            tasks[i].status = status;
         }
     }
     localStorage.setItem('tasks', JSON.stringify(tasks));
     loadTasks();
   }
 
-  function setStatusInProgress(id) {
-    var tasks = JSON.parse(localStorage.getItem('tasks'));
-    for (var i = 0; i < tasks.length; i++) {
-        if (tasks[i].id == id) {
-            tasks[i].status = 'In Progress';
-        }
-    }
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    loadTasks();
-  }
-
-  function setStatusDone(id) {
-    var tasks = JSON.parse(localStorage.getItem('tasks'));
-    for (var i = 0; i < tasks.length; i++) {
-        if (tasks[i].id == id) {
-            tasks[i].status = 'Done';
-        }
-    }
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    loadTasks();
-  }
-  
+//filtry
 
 $('button.filter').click(function(){
     $('.task.jumbotron').hide();
