@@ -14,7 +14,7 @@ function SaveTask(e) {
     id: taskId,
     title: taskTitle,
     description: taskDesc,
-    Importance: taskImportance,
+    importance: taskImportance,
     assignedTo: taskAssignedTo,
     status: taskStatus
   }
@@ -48,7 +48,7 @@ function loadTasks() {
     var id = tasks[i].id;
     var title = tasks[i].title;
     var desc = tasks[i].description;
-    var Importance = tasks[i].Importance;
+    var importance = tasks[i].importance;
     var assignedTo = tasks[i].assignedTo;
     var status = tasks[i].status;
 
@@ -57,7 +57,7 @@ function loadTasks() {
                               '<p>Status: <span class="badge badge-info">' + status + '</span></p>'+
                               '<h3>' + title + '</h3>' +
                               '<p>' + desc + '</p>'+
-                              '<p><i class="fas fa-exclamation"></i> ' + Importance + '</p>'+
+                              '<p><i class="fas fa-exclamation"></i> ' + importance + '</p>'+
                               '<p><i class="fas fa-user"></i> ' + assignedTo + '</p>'+
                               '<a href="#" onclick="deleteTask(\''+id+'\')" class="btn btn-danger pull-right">Delete</a>'+
                               '<div class="btn-group" style="margin:10px;">' +
@@ -69,8 +69,6 @@ function loadTasks() {
                               '  <a class="dropdown-item" onclick="setStatus(\''+id+'\', \'' + 'Done' +'\')" href="#">Done</a>' +
                               '</div>' +
                               '</div>' +
-
-                              
                               '</div>';
   }
 }
@@ -86,9 +84,18 @@ function deleteTask(id) {
     }
   
     localStorage.setItem('tasks', JSON.stringify(tasks));
-  
     loadTasks();
   }
+
+  //usun wszystkie taski
+  $('button#deleteAll').click(function(){
+    var tasks = JSON.parse(localStorage.getItem('tasks'));
+
+    tasks.splice(0, tasks.length);
+
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    loadTasks();
+  })
 
 //zmiana statusu
 
@@ -108,11 +115,13 @@ function setStatus(id, status) {
 
 $('button.filter').click(function(){
     $('.task.jumbotron').hide();
+    $('small#caption').empty();
     var fired_button = $(this).text();
 
     $(".task.jumbotron").each(function (index, element) {
         var status = $(element).find("span.badge.badge-info").text();
         if (fired_button === status){
+            $('small#caption').append('Showing \''+ status +'\'');
             $(this).slideDown();
         }  
         
@@ -121,5 +130,6 @@ $('button.filter').click(function(){
 
 function filterReset(){
     $('.task.jumbotron').show();
+    $('small#caption').empty();
 }
 

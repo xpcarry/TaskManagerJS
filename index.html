@@ -16,7 +16,7 @@
   <body onload="loadTasks()" style="min-height: 1200px;">
     <div class="container" >
       <div class="display-4 text-center">Task Manager</div>
-      <div class="jumbotron" style="background-color: #ffc7b3;">
+      <div class="jumbotron" style="background-color: #ffc7b3; padding-bottom: 35px;">
         <h3 style="margin-bottom: 15px;">Create New Task:</h3>
         <form id="taskInputForm">
           <div class="form-group">
@@ -49,13 +49,17 @@
           </div>
           <button type="submit" class="btn btn-primary col-sm-1">Add</button>
         </form>
+        <button id="deleteAll" class="btn btn-danger mt-3">Remove All</button>
       </div>
-      <div class="col-lg-12 text-center mt-0 mb-5" style="background-color: lightgray; padding: 10px; border-radius: 20px;">
+      <div class="col-lg-12 text-center mt-0" style="background-color: lightgray; padding: 10px; border-radius: 20px;">
         <div class="text-muted">Filter</div>
         <button class="filter btn btn-primary">Available</button>
         <button class="filter btn btn-info">In Progress</button>
         <button class="filter btn btn-success">Done</button>
         <button id="filterReset" onclick="filterReset()" class="btn btn-dark">Show All</button>
+      </div>
+      <div class="text-center text-muted mb-3">
+        <small id="caption"></small>
       </div>
       <div class="col-lg-12">
         <div id="tasksList">
